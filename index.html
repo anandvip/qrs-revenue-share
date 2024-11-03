@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QRS Revenue Partnership Portal</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --success: #16a34a;
+            --warning: #ca8a04;
+            --danger: #dc2626;
+            --background: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            line-height: 1.6;
+            background: var(--background);
+            color: var(--text);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Container Styles */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            flex: 1;
+        }
+
+        /* Header Styles */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .logo-container img {
+            height: 60px;
+            object-fit: contain;
+        }
+
+        .logo-container h1 {
+            font-size: 1.8rem;
+            color: var(--text);
+            font-weight: 600;
+            hyphens: auto;
+            -webkit-hyphens: auto;
+            -ms-hyphens: auto;
+        }
+
+        /* Controls Styles */
+        .controls {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .lang-switch, .theme-toggle {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: var(--primary);
+            color: white;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .lang-switch:hover, .theme-toggle:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 8px var(--shadow);
+        }
+
+        .card h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border);
+            font-size: 1.5rem;
+            hyphens: auto;
+            -webkit-hyphens: auto;
+            -ms-hyphens: auto;
+        }
+
+        /* Table Styles */
+        .tier-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            border-radius: 8px;
+            overflow: hidden;
+            table-layout: fixed;
+        }
+
+        .tier-table th,
+        .tier-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+            -webkit-hyphens: auto;
+            -ms-hyphens: auto;
+        }
+
+        .tier-table th {
+            background: var(--background);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            letter-spacing: 0.05em;
+        }
+
+        .tier-table th:nth-child(1) { width: 25%; }
+        .tier-table th:nth-child(2) { width: 45%; }
+        .tier-table th:nth-child(3) { width: 30%; }
+
+        .tier-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* List Styles */
+        .card ul {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .card li {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+            hyphens: auto;
+            -webkit-hyphens: auto;
+            -ms-hyphens: auto;
+        }
+
+        .card li::before {
+            content: "•";
+            color: var(--primary);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        /* Highlight Box */
+        .highlight {
+            background: var(--background);
+            padding: 1.25rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+            border-left: 4px solid var(--primary);
+            font-weight: 500;
+            hyphens: auto;
+            -webkit-hyphens: auto;
+            -ms-hyphens: auto;
+        }
+
+        /* Footer Styles */
+        .footer {
+            margin-top: auto;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border);
+            box-shadow: 0 -2px 4px var(--shadow);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-text {
+            display: flex;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .author {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .company {
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        /* Dark Theme */
+        body.dark-mode {
+            --background: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --text: #ffffff;
+            --text-secondary: #a0aec0;
+            --border: #404040;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        /* Language-specific styles */
+        [lang="de"] .long-text {
+            word-break: break-word;
+            hyphens: auto;
+            -webkit-hyphens: auto;
+            -ms-hyphens: auto;
+        }
+
+        /* Animation for language transition */
+        [data-lang] {
+            transition: opacity 0.3s ease;
+        }
+
+        .lang-transition {
+            opacity: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .logo-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .logo-container h1 {
+                font-size: 1.5rem;
+            }
+
+            .controls {
+                width: 100%;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .tier-table {
+                font-size: 0.9rem;
+            }
+
+            .tier-table th,
+            .tier-table td {
+                padding: 0.75rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-text {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tier-table {
+                font-size: 0.8rem;
+            }
+
+            .tier-table th,
+            .tier-table td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo-container">
+                <img src="https://raw.githubusercontent.com/anandvip/qrs-resources/refs/heads/main/QRS-removebg-preview.png" alt="QRS Logo">
+                <h1 data-lang="title">QRS Revenue Partnership Portal</h1>
+            </div>
+            <div class="controls">
+                <button class="lang-switch" onclick="changeLanguage('en')">English</button>
+                <button class="lang-switch" onclick="changeLanguage('hi')">हिंदी</button>
+                <button class="lang-switch" onclick="changeLanguage('de')">Deutsch</button>
+                <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+            </div>
+        </header>
+
+        <div class="grid">
+            <div class="card">
+                <h2 data-lang="tiers">Partnership Tiers</h2>
+                <table class="tier-table">
+                    <thead>
+                        <tr>
+                            <th data-lang="tierLevel">Tier</th>
+                            <th data-lang="monthlyRef">Monthly Referrals</th>
+                            <th data-lang="revShare">Revenue Share</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Bronze</td>
+                            <td>0-10</td>
+                            <td>30%</td>
+                        </tr>
+                        <tr>
+                            <td>Silver</td>
+                            <td>11-25</td>
+                            <td>35%</td>
+                        </tr>
+                        <tr>
+                            <td>Gold</td>
+                            <td>26-50</td>
+                            <td>40%</td>
+                        </tr>
+                        <tr>
+                            <td>Platinum</td>
+                            <td>51+</td>
+                            <td>45%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h2 data-lang="benefits">Additional Benefits</h2>
+                <ul>
+                    <li data-lang="earlyBonus">Early Adoption Bonus: +5% for first 3 months</li>
+                    <li data-lang="quarterlyBonus">Quarterly Performance Bonuses</li>
+                    <li data-lang="marketing">Marketing Support Materials</li>
+                    <li data-lang="network">Access to QRS Referral Network</li>
+                </ul>
+                <div class="highlight">
+                    <span data-lang="noInvestment">No upfront investment required - Start earning immediately</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 data-lang="payments">Payment Structure</h2>
+                <ul>
+                    <li data-lang="monthlyCalc">Monthly revenue calculations</li>
+                    <li data-lang="reporting">Transparent reporting system</li>
+                    <li data-lang="tracking">Performance tracking dashboard</li>
+                    <li data-lang="deposits">Direct bank deposits</li>
+                </ul>
+                <div class="highlight">
+                    <span data-lang="payoutDate">Monthly payouts by the 7th of each month</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-text">
+                <span data-lang="preparedBy">Prepared by:</span>
+                <span class="author">Vipul Anand</span>
+            </div>
+            <div class="footer-date">
+                <span data-lang="date">November 2024</span>
+            </div>
+            <div class="company">
+                <span>QRS India Private Limited</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const translations = {
+            en: {
+                title: "QRS Revenue Partnership Portal",
+                tiers: "Partnership Tiers",
+                tierLevel: "Tier",
+                monthlyRef: "Monthly Referrals",
+                revShare: "Revenue Share",
+                benefits: "Additional Benefits",
+                earlyBonus: "Early Adoption Bonus: +5% for first 3 months",
+                quarterlyBonus: "Quarterly Performance Bonuses",
+                marketing: "Marketing Support Materials",
+                network: "Access to QRS Referral Network",
+                noInvestment: "No upfront investment required - Start earning immediately",
+                payments: "Payment Structure",
+                monthlyCalc: "Monthly revenue calculations",
+                reporting: "Transparent reporting system",
+                tracking: "Performance tracking dashboard",
+                deposits: "Direct bank deposits",
+                payoutDate: "Monthly payouts by the 7th of each month",
+                preparedBy: "Prepared by:",
+                date: "November 2024"
+            },
+            hi: {
+                title: "क्यूआरएस राजस्व साझेदारी पोर्टल",
+                tiers: "साझेदारी स्तर",
+                tierLevel: "स्तर",
+                monthlyRef: "मासिक रेफरल",
+                revShare: "राजस्व शेयर",
+                benefits: "अतिरिक्त लाभ",
+                earlyBonus: "अर्ली एडॉप्शन बोनस: पहले 3 महीनों के लिए +5%",
+                quarterlyBonus: "त्रैमासिक प्रदर्शन बोनस",
+                marketing: "मार्केटिंग सहायक सामग्री",
+                network: "क्यूआरएस रेफरल नेटवर्क तक पहुंच",
+               noInvestment: "कोई अग्रिम निवेश नहीं - तुरंत कमाना शुरू करें",
+                payments: "भुगतान संरचना",
+                monthlyCalc: "मासिक राजस्व गणना",
+                reporting: "पारदर्शी रिपोर्टिंग सिस्टम",
+                tracking: "प्रदर्शन ट्रैकिंग डैशबोर्ड",
+                deposits: "सीधे बैंक जमा",
+                payoutDate: "हर महीने की 7 तारीख तक भुगतान",
+                preparedBy: "तैयारकर्ता:",
+                date: "नवंबर 2024"
+            },
+            de: {
+                title: "QRS Umsatz­beteiligungs­portal",
+                tiers: "Partner­schafts­stufen",
+                tierLevel: "Stufe",
+                monthlyRef: "Monatliche Über­weisungen",
+                revShare: "Umsatz­beteiligung",
+                benefits: "Zusätzliche Vorteile",
+                earlyBonus: "Früh­bucher­bonus: +5% für die ersten 3 Monate",
+                quarterlyBonus: "Viertel­jährliche Leistungs­boni",
+                marketing: "Marketing-Unter­stützungs­materialien",
+                network: "Zugang zum QRS-Über­weisungs­netzwerk",
+                noInvestment: "Keine Vorab­investition erforderlich - Sofort mit dem Verdienen beginnen",
+                payments: "Zahlungs­struktur",
+                monthlyCalc: "Monatliche Ertrags­berechnungen",
+                reporting: "Transparentes Berichts­system",
+                tracking: "Leistungs­verfolgung-Dashboard",
+                deposits: "Direkte Bank­einzahlungen",
+                payoutDate: "Monatliche Aus­zahlungen bis zum 7. des Monats",
+                preparedBy: "Erstellt von:",
+                date: "November 2024"
+            }
+        };
+
+        function changeLanguage(lang) {
+            // Add transition class for smooth fade effect
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                el.classList.add('lang-transition');
+            });
+
+            setTimeout(() => {
+                // Update document language for proper hyphenation
+                document.documentElement.lang = lang;
+                const content = translations[lang];
+                
+                // Update all translatable elements
+                document.querySelectorAll('[data-lang]').forEach(element => {
+                    const key = element.getAttribute('data-lang');
+                    if (content[key]) {
+                        element.textContent = content[key];
+                    }
+                });
+
+                // Remove transition class to show new content
+                document.querySelectorAll('[data-lang]').forEach(el => {
+                    el.classList.remove('lang-transition');
+                });
+            }, 300);
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        // Initialize with English and setup hyphenation
+        document.addEventListener('DOMContentLoaded', () => {
+            changeLanguage('en');
+        });
+    </script>
+</body>
+</html>
